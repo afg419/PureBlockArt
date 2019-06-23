@@ -2,12 +2,12 @@ module Lib.FibrePlane where
 
 import Prelude
 
-import Data.BigInt (BigInt, fromInt, pow)
+import Data.BigInt (BigInt, fromInt, pow, rem)
 import Data.Tuple (Tuple(..))
-import Lib.CoordinatePlane (Coordinate, trustedBigInt, CoordinatePlane, CoordinateRange, scaleToNewSegment)
-import Partial.Unsafe (unsafePartial)
-import Data.Either (fromRight)
-
+import Lib.CoordinatePlane (Coordinate, CoordinatePlane, CoordinateRange, scaleToNewPlane, scaleToNewSegment)
+import Lib.Util (hexToBigInt, trustedBigInt)
+import LibJS.Bitcoin (hash256Hex)
+import Test.QuickCheck.Arbitrary (class Arbitrary, arbitrary)
 
 hash256Size :: BigInt
 hash256Size = (fromInt 2) `pow` (fromInt 256)
@@ -29,3 +29,16 @@ preimageInFibrePlane { x, y, plane } =
     one = trustedBigInt "1"
     topX = min (x+one) (plane.xCount)
     topY = min (y+one) (plane.yCount)
+
+
+newtype ArbitaryCoordinate = ArbCoordinate Coordinate
+instance arbCoordinate :: Arbitrary ArbitaryCoordinate where
+  arbitrary = do
+    x1 <- (hexToBigInt <<< hash256Hex) <$> arbitrary
+    y1 <- (hexToBigInt <<< hash256Hex) <$> arbitrary
+    x2 <- (flip rem (trustedBigInt "100000000") <<< hexToBigInt <<< hash256Hex) <$> arbitrary
+    y2 <- (flip rem (trustedBigInt "100000000") <<< hexToBigInt <<< hash256Hex) <$> arbitrary
+
+    let coordinate = { x: x1, y: y1, plane : fibrePlane }
+    let plane = { xCount : x2, yCount : y2 }
+    pure <<< ArbCoordinate $ scaleToNewPlane coordinate plane
