@@ -1,11 +1,8 @@
 module LibJS.HexString where
 
-import Data.BigInt as BI
-import Data.BigNumber as BN
-import Data.BigNumber as BN.BigNumber
 import Data.Maybe (Maybe(..), isJust)
 import Data.String (Pattern(..), fromCodePointArray, indexOf, takeWhile)
-import Prelude (class Show, show, ($), (==), (<>), map)
+import Prelude (class Show, ($), (<>), (==))
 
 hexAlph :: String
 hexAlph = "0123456789abcdefABCDEF"

@@ -1,20 +1,19 @@
 module Lib.AddressTransform where
 
 import Prelude
-import Data.BigInt (BigInt, fromInt)
 
-import Lib.CoordinatePlane (Coordinate)
+import Lib.CoordinatePlane (Coordinate, CoordinatePlane, scaleToNewPlane)
 import Lib.FibrePlane (fibrePlane)
+import Lib.Util (hexToBigInt)
+import LibJS.Bip32 (Address(..))
+import LibJS.Bitcoin (hash256Hex)
 
-newtype Address = Address String
-
--- TODO: figure out how to concatenate strings, jesus
 toFibrePlane :: Address -> Coordinate
-toFibrePlane (Address addr) = { x: hash256BigInt xShift, y: hash256BigInt yShift, plane: fibrePlane }
+toFibrePlane (Address addr) = { x: toPoint xShift, y: toPoint yShift, plane: fibrePlane }
   where
     xShift = "x" <> addr
     yShift = "y" <> addr
+    toPoint = hexToBigInt <<< hash256Hex
 
--- TODO: write this as an FFI from js lib
-hash256BigInt :: String -> BigInt
-hash256BigInt digest = fromInt 0
+toPlane :: CoordinatePlane -> Address -> Coordinate
+toPlane plane = toFibrePlane >>> scaleToNewPlane plane

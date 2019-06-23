@@ -30,7 +30,6 @@ preimageInFibrePlane { x, y, plane } =
     topX = min (x+one) (plane.xCount)
     topY = min (y+one) (plane.yCount)
 
-
 newtype ArbitaryCoordinate = ArbCoordinate Coordinate
 instance arbCoordinate :: Arbitrary ArbitaryCoordinate where
   arbitrary = do
@@ -41,4 +40,4 @@ instance arbCoordinate :: Arbitrary ArbitaryCoordinate where
 
     let coordinate = { x: x1, y: y1, plane : fibrePlane }
     let plane = { xCount : x2, yCount : y2 }
-    pure <<< ArbCoordinate $ scaleToNewPlane coordinate plane
+    pure <<< ArbCoordinate $ scaleToNewPlane plane coordinate

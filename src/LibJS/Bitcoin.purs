@@ -10,6 +10,10 @@ hash256Hex :: String -> HexString
 hash256Hex hex = unsafePartial $ fromJust <<< mkHexString $ ffiHash256Hex hex
 foreign import ffiHash256Hex :: String -> String
 
+hash160Hex :: String -> HexString
+hash160Hex hex = unsafePartial $ fromJust <<< mkHexString $ ffiHash160Hex hex
+foreign import ffiHash160Hex :: String -> String
+
 foreign import data Bip32Node :: Type
 
 mkBip32 :: XPub -> Bip32Node

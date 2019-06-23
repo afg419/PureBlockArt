@@ -1,7 +1,7 @@
 module Lib.Util where
 
 import Data.BigInt as BI
-import Data.BigNumber as BN
+import LibJS.BigNumber as BN
 import Data.Either (fromRight)
 import Data.Maybe (fromJust)
 import Data.Tuple (Tuple)

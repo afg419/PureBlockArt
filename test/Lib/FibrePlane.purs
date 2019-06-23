@@ -18,7 +18,7 @@ fibrePlanePreimageTrip = quickCheck $ \(ArbCoordinate coordinate) -> do
   yInPreimage <- (trustedBigInt <<< show) <$> Gen.choose (toNumber <<< fst $ coordinateRange.yBetween) (toNumber <<< snd $ coordinateRange.yBetween)
   let coordinateInPreimage = { x: xInPreimage, y: yInPreimage, plane: fibrePlane }
 
-  let projectedCoordinate = scaleToNewPlane coordinateInPreimage coordinate.plane
+  let projectedCoordinate = scaleToNewPlane coordinate.plane coordinateInPreimage
 
   pure $ coordinate === projectedCoordinate
 
